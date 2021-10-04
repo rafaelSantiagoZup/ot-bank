@@ -45,7 +45,20 @@ services:
       POSTGRES_PASSWORD: changeme
       POSTGRES_DB: ot-bank-extrato
       POSTGRES_HOST: ot-bank-extrato
+
+  postgres-conta-digital:
+    image: 'postgres:9.6-alpine'
+    volumes:
+      - postgres-conta-digital:/var/lib/postgresql/data
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: ot-bank-conta-digital
+      POSTGRES_HOST: ot-bank-conta-digital
     
 volumes:
   postgres-boleto:
   postgres-extrato:
+  postgres-conta-digital:
