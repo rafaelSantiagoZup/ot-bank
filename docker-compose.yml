@@ -33,5 +33,19 @@ services:
       POSTGRES_PASSWORD: changeme
       POSTGRES_DB: ot-bank-boleto
       POSTGRES_HOST: ot-bank-boleto
+      
+  postgres-extrato:
+    image: 'postgres:9.6-alpine'
+    volumes:
+      - postgres-extrato:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: ot-bank-extrato
+      POSTGRES_HOST: ot-bank-extrato
+    
 volumes:
   postgres-boleto:
+  postgres-extrato:
