@@ -22,3 +22,17 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     command: sh -c "((sleep 15 && kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --topic pagamento-boleto)&) && /etc/confluent/docker/run && ((sleep 15 && kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --topic recarga-celular)&) && /etc/confluent/docker/run && ((sleep 15 && kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --topic extrato)&) && /etc/confluent/docker/run && ((sleep 15 && kafka-topics --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 3 --topic email)&) && /etc/confluent/docker/run "
+
+  postgres-boleto:
+    image: 'postgres:9.6-alpine'
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: ot-bank-boleto
+      POSTGRES_HOST: ot-bank-boleto
+volumes:
+  postgres-boleto:
