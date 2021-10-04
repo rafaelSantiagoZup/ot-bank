@@ -1,0 +1,13 @@
+micronaut:
+  application:
+    name: recargacelular
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: ''
+    schema-generate: CREATE_DROP
+    dialect: POSTGRES
+kafka.bootstrap.servers: localhost:9092
+jpa.default.properties.hibernate.hbm2ddl.auto: update
