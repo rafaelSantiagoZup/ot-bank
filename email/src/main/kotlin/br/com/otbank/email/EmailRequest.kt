@@ -1,4 +1,4 @@
-package br.com.otbank
+package br.com.otbank.email
 
 import io.micronaut.core.annotation.Introspected
 import javax.persistence.Column
@@ -19,7 +19,7 @@ data class EmailRequest(
     val message:String?
 ) {
     companion object{
-        fun EmailRequest.toModel():Email{
+        fun EmailRequest.toModel(): Email {
             return Email(sender,recipientEmail,recipientName,subject,message)
         }
     }

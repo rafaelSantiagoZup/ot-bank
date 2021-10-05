@@ -1,4 +1,4 @@
-package br.com.otbank
+package br.com.otbank.email
 
 import io.micronaut.core.annotation.Introspected
 import java.time.LocalDateTime
@@ -27,6 +27,11 @@ class Email(
     @field:FutureOrPresent
     val timestamp:LocalDateTime? = LocalDateTime.now()
 
+    companion object{
+        fun Email.toDTO():EmailDTO{
+            return EmailDTO(recipientEmail,recipientName,subject,message,timestamp)
+        }
+    }
 
 
     override fun equals(other: Any?): Boolean {
