@@ -1,0 +1,25 @@
+micronaut:
+  application:
+    name: email
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+  executors:
+    consumer:
+      type: fixed
+      nThreads: 25
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5436/ot-bank-email
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: pass
+    schema-generate: UPDATE
+    dialect: POSTGRES
+jpa.default.properties.hibernate.hbm2ddl.auto: update
+kafka.bootstrap.servers: localhost:9092

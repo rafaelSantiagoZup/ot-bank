@@ -21,7 +21,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      
+
   postgres-boleto:
     image: 'postgres:9.6-alpine'
     volumes:
@@ -69,9 +69,22 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: ot-bank-recarga
       POSTGRES_HOST: ot-bank-recarga
+
+  postgres-email:
+    image: 'postgres:9.6-alpine'
+    volumes:
+      - postgres-email:/var/lib/postgresql/data
+    ports:
+      - 5436:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: ot-bank-email
+      POSTGRES_HOST: ot-bank-email
     
 volumes:
   postgres-boleto:
   postgres-extrato:
   postgres-conta-digital:
   postgres-recarga:
+  postgres-email:
