@@ -19,13 +19,13 @@ class Email(
     val subject:String?,
     @field:NotBlank
     @Column(length = 2000)
-    val message:String?
+    val message:String?,
+    val timestamp:LocalDateTime? = LocalDateTime.now()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null
-    @field:FutureOrPresent
-    val timestamp:LocalDateTime? = LocalDateTime.now()
+
 
     companion object{
         fun Email.toDTO():EmailDTO{

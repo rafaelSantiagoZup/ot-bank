@@ -9,7 +9,7 @@ import javax.validation.Valid
 
 @Validated
 @Singleton
-class EmailService(@Inject private val repository: EmailRepository) {
+open class EmailService(@Inject private val repository: EmailRepository) {
     val logger = LoggerFactory.getLogger(this::class.java)
 
     fun sendEmail(@Valid email: EmailRequest):Boolean{
