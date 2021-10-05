@@ -1,6 +1,6 @@
 package br.com.otbank.extrato.kafka;
 
-import br.com.otbank.extrato.kafka.consumers.TransacaoConsumer;
+import br.com.otbank.extrato.kafka.consumers.TransactionConsumes;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -23,10 +23,6 @@ public class KafkaConfiguration {
         this.kafkaProperties = kafkaProperties;
     }
 
-    /**
-     * Propriedades
-     */
-
     public Map<String, Object> consumerConfigurations() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
@@ -38,27 +34,17 @@ public class KafkaConfiguration {
         return properties;
     }
 
-    /**
-     * Consumidor
-     */
-
     @Bean
-    public ConsumerFactory<String, TransacaoConsumer> transactionConsumerFactory() {
+    public ConsumerFactory<String, TransactionConsumes> transactionConsumerFactory() {
         StringDeserializer stringDeserializer = new StringDeserializer();
-        JsonDeserializer<TransacaoConsumer> jsonDeserializer = new JsonDeserializer<>(TransacaoConsumer.class, false);
+        JsonDeserializer<TransactionConsumes> jsonDeserializer = new JsonDeserializer<>(TransactionConsumes.class, false);
 
         return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), stringDeserializer, jsonDeserializer);
     }
 
-    /**
-     * Este é o Listener.
-     * Criou-se o ConcurrentKafkaListenerContainerFactory, no qual precisa ser cadastrado como ele irá
-     * tratar os eventos recebidos, por isso, foi criado o método transactionConsumerFactory()
-     */
-
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, TransacaoConsumer> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, TransacaoConsumer> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, TransactionConsumes> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TransactionConsumes> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(transactionConsumerFactory());
 
         return factory;

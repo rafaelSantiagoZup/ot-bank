@@ -1,7 +1,7 @@
 package br.com.otbank.extrato.controller;
 
-import br.com.otbank.extrato.models.TransacaoModel;
-import br.com.otbank.extrato.repository.TransacaoRepository;
+import br.com.otbank.extrato.models.BankTransactional;
+import br.com.otbank.extrato.repository.TransactionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,18 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/transacoes")
-public class TransacaoController {
+public class TransactionalController {
 
     @Autowired
-    private TransacaoRepository transacaoRepository;
+    private TransactionalRepository transactionalRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity consultarTransacoes
+    public ResponseEntity consultTransactions
             (@PathVariable Long id, @PageableDefault(sort = "ContaId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
 
+        Page<BankTransactional> transactions = transactionalRepository.findByContaId(id, pageable);
 
-        Page<TransacaoModel> transacoes = transacaoRepository.findByContaId(id, pageable);
-
-        return ResponseEntity.ok("RETORNAR TRANSACOES");
+        return ResponseEntity.ok("payload");
     }
 }
