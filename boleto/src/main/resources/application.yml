@@ -1,13 +1,21 @@
 micronaut:
   application:
     name: boleto
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/ot-bank-boleto
     driverClassName: org.postgresql.Driver
     username: postgres
-    password: ''
-    schema-generate: CREATE_DROP
+    password: changeme
+    schema-generate: UPDATE
     dialect: POSTGRES
 kafka.bootstrap.servers: localhost:9092
 jpa.default.properties.hibernate.hbm2ddl.auto: update

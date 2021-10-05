@@ -25,7 +25,7 @@ services:
   postgres-boleto:
     image: 'postgres:9.6-alpine'
     volumes:
-      - postgres-volume:/var/lib/postgresql/data
+      - postgres-boleto:/var/lib/postgresql/data
     ports:
       - 5432:5432
     environment:
@@ -61,7 +61,7 @@ services:
   postgres-recarga:
     image: 'postgres:9.6-alpine'
     volumes:
-      - postgres-volume:/var/lib/postgresql/data
+      - postgres-recarga:/var/lib/postgresql/data
     ports:
       - 5435:5432
     environment:

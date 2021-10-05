@@ -1,6 +1,17 @@
 package br.com.otbank
 
 import io.micronaut.runtime.Micronaut.*
+import io.swagger.v3.oas.annotations.*
+import io.swagger.v3.oas.annotations.info.*
+
+@OpenAPIDefinition(
+    info = Info(
+            title = "boleto",
+            version = "0.0"
+    )
+)
+object Api {
+}
 fun main(args: Array<String>) {
 	build()
 	    .args(*args)

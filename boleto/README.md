@@ -6,19 +6,25 @@
 - [Micronaut Guides](https://guides.micronaut.io/index.html)
 ---
 
-## Feature http-client documentation
+## Feature jdbc-hikari documentation
 
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
-
-## Feature testcontainers documentation
-
-- [https://www.testcontainers.org/](https://www.testcontainers.org/)
+- [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
 
 ## Feature kafka documentation
 
 - [Micronaut Kafka Messaging documentation](https://micronaut-projects.github.io/micronaut-kafka/latest/guide/index.html)
 
-## Feature jdbc-hikari documentation
+## Feature testcontainers documentation
 
-- [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
+- [https://www.testcontainers.org/](https://www.testcontainers.org/)
+
+## Feature openapi documentation
+
+- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
+
+- [https://www.openapis.org](https://www.openapis.org)
+
+## Feature http-client documentation
+
+- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
 
