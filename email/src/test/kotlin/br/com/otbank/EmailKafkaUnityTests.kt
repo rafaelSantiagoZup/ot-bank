@@ -1,20 +1,17 @@
 package br.com.otbank;
 
-import br.com.otbank.email.EmailListener
 import br.com.otbank.email.EmailRepository
-import br.com.otbank.email.KafkaEmailClient
 import br.com.otbank.transaction.Account
 import br.com.otbank.transaction.Customer
 import br.com.otbank.transaction.TransactionDTO
-import br.com.otbank.transaction.TransactionDTO.Companion.toEmailDTO
 import br.com.otbank.transaction.TransactionType
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import jakarta.inject.Inject;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import jakarta.inject.Inject
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
@@ -49,4 +46,5 @@ public class EmailKafkaUnityTests {
         assertTrue(transactionRequest.type != TransactionType.DEBIT)
         assertTrue(transactionRequest.type == TransactionType.CREDIT)
     }
+
 }

@@ -1,6 +1,7 @@
 package br.com.otbank
 
 import br.com.otbank.email.*
+import br.com.otbank.email.EmailRequest.Companion.toModel
 import br.com.otbank.transaction.Account
 import br.com.otbank.transaction.Customer
 import br.com.otbank.transaction.TransactionDTO
@@ -13,6 +14,7 @@ import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import org.awaitility.Awaitility.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import java.math.BigDecimal
@@ -59,9 +61,11 @@ class EmailKafkaTest {
     fun `should save email in database`(){
         kafkaClient.sendEmail(transactionRequest)
 
-        listener.latch.await(15000,TimeUnit.MILLISECONDS)
+        await().atMost(5,TimeUnit.SECONDS).until { repository.findAll().size == 1 }
+
         val responseFromServer = repository.findAll()
-        println(responseFromServer.size)
+
+
         assertTrue(responseFromServer.size > 0)
         assertEquals(responseFromServer[0].recipientEmail,transactionRequest.customer?.email)
         assertEquals(responseFromServer[0].message,transactionRequest.toEmailDTO().message)
@@ -87,6 +91,25 @@ class EmailKafkaTest {
         listener.latch.await(10000,TimeUnit.MILLISECONDS)
         val request = HttpRequest.GET<Any>("api/v1/emails")
         val response:HttpResponse<List<EmailDTO>> = client.toBlocking().exchange(request)
+        assertEquals(response.status,HttpStatus.OK)
+    }
+    @Test
+    fun `should return true when the email is already registered`(){
+        repository.save(transactionRequest.toEmailDTO().toModel())
+
+        assertTrue(emailService.checkEmailExistence(transactionRequest.toEmailDTO()))
+    }
+    @Test
+    fun `should return ok when search by id REST`(){
+        kafkaClient.sendEmail(transactionRequest)
+
+        await().atMost(5,TimeUnit.SECONDS).until { repository.findAll().size == 1 }
+        
+        val responseFromRepo = repository.findAll()
+        val idReq = responseFromRepo[0].id
+
+        val request = HttpRequest.GET<Any>("api/v1/email/${idReq}")
+        val response:HttpResponse<EmailDTO> = client.toBlocking().exchange(request)
         assertEquals(response.status,HttpStatus.OK)
     }
 }
