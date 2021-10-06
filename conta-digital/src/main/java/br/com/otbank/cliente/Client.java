@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Embeddable
 @Entity
-public class Customer {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

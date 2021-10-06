@@ -12,7 +12,7 @@ import java.util.UUID;
 public class TransactionDTO {
 
     @NotBlank
-    private UUID idCostumer;
+    private UUID clientId;
     @Enumerated(EnumType.STRING)
     @NotBlank
     private TransactionType type;
@@ -20,9 +20,20 @@ public class TransactionDTO {
     private BigDecimal value;
 
     public TransactionDTO(@Valid Transaction transaction){
-        this.idCostumer = transaction.getCustomer().getId();
+        this.clientId = transaction.getCustomer().getId();
         this.type = transaction.getType();
         this.value = transaction.getValue();
+    }
+    @Deprecated
+    public TransactionDTO() {
+    }
+
+    public UUID getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(UUID clientId) {
+        this.clientId = clientId;
     }
 
     public TransactionType getType() {
