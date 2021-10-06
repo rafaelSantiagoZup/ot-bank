@@ -2,6 +2,7 @@ package br.com.otbank.extrato.models;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.StringJoiner;
 
 @Entity
 public class Account {
@@ -12,7 +13,7 @@ public class Account {
     private String number;
     private BigDecimal balance;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
 
     @Deprecated
@@ -27,11 +28,14 @@ public class Account {
         this.customer = customer;
     }
 
-    public String getAgency() {
-        return agency;
-    }
-
-    public String getNumber() {
-        return number;
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Account.class.getSimpleName() + "[", "]")
+                .add("id='" + id + "'")
+                .add("agency='" + agency + "'")
+                .add("number='" + number + "'")
+                .add("balance=" + balance)
+                .add("customer=" + customer)
+                .toString();
     }
 }

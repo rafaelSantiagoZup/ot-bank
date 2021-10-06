@@ -14,17 +14,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/transacoes")
+@RequestMapping("/transactions")
 public class TransactionalController {
 
     @Autowired
     private TransactionalRepository transactionalRepository;
 
-    @GetMapping("/{id}")
-    public ResponseEntity consultTransactions
-            (@PathVariable Long id, @PageableDefault(sort = "AccountId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
+    /**
+     * As pessoas devem conseguir visualizar no aplicativo as operações que aconteceram na sua conta.
+     * Portanto, precisamos listar sempre as 20 últimas transações que ocorreram para determinada pessoa.
+     */
 
-        Page<BankTransactional> transactions = transactionalRepository.findByAccountId(id, pageable);
-        return ResponseEntity.ok(transactions);
+    @GetMapping("/{id}")
+    public ResponseEntity consultTransactions(@PathVariable Long id, @PageableDefault(sort = "AccountId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
+
+        //Page<BankTransactional> transactions = transactionalRepository.findByAccountId(id, pageable);
+
+
+
+
+        return ResponseEntity.ok("transactions");
     }
 }

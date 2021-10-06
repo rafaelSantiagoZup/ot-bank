@@ -2,29 +2,44 @@ package br.com.otbank.extrato.models;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.StringJoiner;
 
 @Entity
 public class BankTransactional {
-
     @Id
     private String id;
 
     private BigDecimal value;
-    private TransactionType transactionType;
-    private LocalDate occurredIn;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
+    private LocalDateTime occurredOn;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     private Account account;
 
     @Deprecated
     public BankTransactional() {
     }
 
-    public BankTransactional(String id, BigDecimal value, TransactionType transactionType, Account account) {
+    public BankTransactional(String id, BigDecimal value, TransactionType transactionType, LocalDateTime occurredOn,
+                             Account account) {
         this.id = id;
         this.value = value;
         this.transactionType = transactionType;
+        this.occurredOn = occurredOn;
         this.account = account;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", BankTransactional.class.getSimpleName() + "[", "]")
+                .add("id='" + id + "'")
+                .add("value=" + value)
+                .add("transactionType=" + transactionType)
+                .add("occurredOn=" + occurredOn)
+                .add("account=" + account)
+                .toString();
     }
 }

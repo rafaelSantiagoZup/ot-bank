@@ -23,12 +23,10 @@ public class TransactionListener {
     @Autowired
     private TransactionalRepository transactionalRepository;
 
-
     private final Logger logger = LoggerFactory.getLogger(TransactionListener.class);
 
     @KafkaListener(topics = "${spring.kafka.topic.transactions}")
     public void consumeTopic(TransactionConsumes transactionConsumes) {
-
         BankTransactional bankTransactional = transactionConsumes.toModel(accountRepository, customerRepository);
         transactionalRepository.save(bankTransactional);
 
