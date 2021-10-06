@@ -1,38 +1,35 @@
 package br.com.otbank.extrato.kafka.consumers;
 
 import br.com.otbank.extrato.models.BankTransactional;
-import br.com.otbank.extrato.models.KindTransaction;
-import org.hibernate.cfg.NotYetImplementedException;
+import br.com.otbank.extrato.models.TransactionType;
+import br.com.otbank.extrato.repository.AccountRepository;
+import br.com.otbank.extrato.repository.CustomerRepository;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class TransactionConsumes {
 
     private String id;
 
     private BigDecimal value;
-    private KindTransaction kindTransaction;
-    private LocalDate occurredIn = LocalDate.now();
-    private CustomerConsumes customer;
-    private AccountConsumes accountConsumes;
+    private TransactionType transactionType;
+    private LocalDateTime occurredIn = LocalDateTime.now();
+    private AccountConsumes account;
 
     @Deprecated
     public TransactionConsumes() {
 
     }
 
-    public TransactionConsumes(String id, BigDecimal value, KindTransaction kindTransaction,
-                               LocalDate occurredIn, CustomerConsumes customer, AccountConsumes accountConsumes) {
+    public TransactionConsumes(String id, BigDecimal value, TransactionType transactionType, AccountConsumes account) {
         this.id = id;
         this.value = value;
-        this.kindTransaction = kindTransaction;
-        this.occurredIn = occurredIn;
-        this.customer = customer;
-        this.accountConsumes = accountConsumes;
+        this.transactionType = transactionType;
+        this.account = account;
     }
 
-    public BankTransactional toModel() {
-        throw new NotYetImplementedException("Method to be implemented after approval.");
+    public BankTransactional toModel(AccountRepository accountRepository, CustomerRepository customerRepository) {
+        return new BankTransactional(this.id, this.value, this.transactionType, this.account.toModel(accountRepository, customerRepository));
     }
 }

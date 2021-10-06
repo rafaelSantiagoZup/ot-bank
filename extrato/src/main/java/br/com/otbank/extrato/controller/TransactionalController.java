@@ -22,10 +22,9 @@ public class TransactionalController {
 
     @GetMapping("/{id}")
     public ResponseEntity consultTransactions
-            (@PathVariable Long id, @PageableDefault(sort = "ContaId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
+            (@PathVariable Long id, @PageableDefault(sort = "AccountId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
 
-        Page<BankTransactional> transactions = transactionalRepository.findByContaId(id, pageable);
-
-        return ResponseEntity.ok("payload");
+        Page<BankTransactional> transactions = transactionalRepository.findByAccountId(id, pageable);
+        return ResponseEntity.ok(transactions);
     }
 }
