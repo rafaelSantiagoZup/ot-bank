@@ -13,8 +13,7 @@ import java.util.UUID;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     @NotBlank
     private String name;
     @NotNull @Email
@@ -22,6 +21,10 @@ public class Client {
     @ManyToOne
     @Embedded
     private Account account;
+
+    @Deprecated
+    public Client() {
+    }
 
     public UUID getId() {
         return id;
@@ -37,5 +40,21 @@ public class Client {
 
     public Account getAccount() {
         return account;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

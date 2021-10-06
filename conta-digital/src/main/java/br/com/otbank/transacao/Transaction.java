@@ -43,11 +43,31 @@ public class Transaction {
         return occurredIn;
     }
 
-    public Client getCustomer() {
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    public void setOccurredIn(LocalDateTime occurredIn) {
+        this.occurredIn = occurredIn;
+    }
+
+    public Client getClient() {
         return client;
     }
 
-    public TransactionType getType() {
-        return type;
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 }

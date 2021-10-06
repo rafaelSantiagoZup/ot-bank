@@ -42,7 +42,7 @@ public class AccountController {
                     client,
                     transactionDTO.getType()
                 );
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(transaction);
     }
 
 }

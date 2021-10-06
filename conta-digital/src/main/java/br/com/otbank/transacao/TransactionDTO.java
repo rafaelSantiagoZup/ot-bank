@@ -11,16 +11,16 @@ import java.util.UUID;
 
 public class TransactionDTO {
 
-    @NotBlank
+    @NotNull
     private UUID clientId;
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @NotNull
     private TransactionType type;
     @NotNull @Positive
     private BigDecimal value;
 
     public TransactionDTO(@Valid Transaction transaction){
-        this.clientId = transaction.getCustomer().getId();
+        this.clientId = transaction.getClient().getId();
         this.type = transaction.getType();
         this.value = transaction.getValue();
     }
@@ -42,5 +42,13 @@ public class TransactionDTO {
 
     public BigDecimal getValue() {
         return value;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 }
