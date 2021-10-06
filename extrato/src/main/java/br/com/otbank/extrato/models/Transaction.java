@@ -5,8 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-public class BankTransactional {
-
+public class Transaction {
     @Id
     private String id;
 
@@ -18,10 +17,10 @@ public class BankTransactional {
     private Account account;
 
     @Deprecated
-    public BankTransactional() {
+    public Transaction() {
     }
 
-    public BankTransactional(String id, BigDecimal value, TransactionType transactionType, Account account) {
+    public Transaction(String id, BigDecimal value, TransactionType transactionType, Account account) {
         this.id = id;
         this.value = value;
         this.transactionType = transactionType;

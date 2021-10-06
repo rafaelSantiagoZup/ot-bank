@@ -1,6 +1,6 @@
 package br.com.otbank.extrato.kafka.consumers;
 
-import br.com.otbank.extrato.models.BankTransactional;
+import br.com.otbank.extrato.models.Transaction;
 import br.com.otbank.extrato.models.TransactionType;
 import br.com.otbank.extrato.repository.AccountRepository;
 import br.com.otbank.extrato.repository.CustomerRepository;
@@ -29,7 +29,7 @@ public class TransactionConsumes {
         this.account = account;
     }
 
-    public BankTransactional toModel(AccountRepository accountRepository, CustomerRepository customerRepository) {
-        return new BankTransactional(this.id, this.value, this.transactionType, this.account.toModel(accountRepository, customerRepository));
+    public Transaction toModel(AccountRepository accountRepository, CustomerRepository customerRepository) {
+        return new Transaction(this.id, this.value, this.transactionType, this.account.toModel(accountRepository, customerRepository));
     }
 }

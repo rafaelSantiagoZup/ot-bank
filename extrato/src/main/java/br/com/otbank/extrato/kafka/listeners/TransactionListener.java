@@ -1,10 +1,10 @@
 package br.com.otbank.extrato.kafka.listeners;
 
 import br.com.otbank.extrato.kafka.consumers.TransactionConsumes;
-import br.com.otbank.extrato.models.BankTransactional;
+import br.com.otbank.extrato.models.Transaction;
 import br.com.otbank.extrato.repository.AccountRepository;
 import br.com.otbank.extrato.repository.CustomerRepository;
-import br.com.otbank.extrato.repository.TransactionalRepository;
+import br.com.otbank.extrato.repository.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class TransactionListener {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private TransactionalRepository transactionalRepository;
+    private TransactionRepository transactionRepository;
 
 
     private final Logger logger = LoggerFactory.getLogger(TransactionListener.class);
@@ -29,8 +29,8 @@ public class TransactionListener {
     @KafkaListener(topics = "${spring.kafka.topic.transactions}")
     public void consumeTopic(TransactionConsumes transactionConsumes) {
 
-        BankTransactional bankTransactional = transactionConsumes.toModel(accountRepository, customerRepository);
-        transactionalRepository.save(bankTransactional);
+        Transaction transaction = transactionConsumes.toModel(accountRepository, customerRepository);
+        transactionRepository.save(transaction);
 
         logger.info("Transaction Inserted in the Database");
     }

@@ -1,7 +1,7 @@
 package br.com.otbank.extrato.controller;
 
-import br.com.otbank.extrato.models.BankTransactional;
-import br.com.otbank.extrato.repository.TransactionalRepository;
+import br.com.otbank.extrato.models.Transaction;
+import br.com.otbank.extrato.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,17 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/transacoes")
-public class TransactionalController {
+public class TransactionController {
 
     @Autowired
-    private TransactionalRepository transactionalRepository;
+    private TransactionRepository transactionRepository;
 
-    @GetMapping("/{id}")
-    public ResponseEntity consultTransactions
-            (@PathVariable Long id, @PageableDefault(sort = "AccountId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
+    @GetMapping("/{id}/transacoes")
+    public ResponseEntity<?> consultTransactions
+            (@PathVariable String id, @PageableDefault(sort = "AccountId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
 
-        Page<BankTransactional> transactions = transactionalRepository.findByAccountId(id, pageable);
+        Page<Transaction> transactions = transactionRepository.findByAccountId(id, pageable);
         return ResponseEntity.ok(transactions);
     }
 }
