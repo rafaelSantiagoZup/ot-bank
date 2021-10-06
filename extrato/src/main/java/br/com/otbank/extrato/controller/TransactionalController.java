@@ -2,6 +2,7 @@ package br.com.otbank.extrato.controller;
 
 import br.com.otbank.extrato.models.BankTransactional;
 import br.com.otbank.extrato.repository.TransactionalRepository;
+import br.com.otbank.extrato.response.TransactionalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("/extracts/transactions")
 public class TransactionalController {
 
     @Autowired
@@ -25,14 +29,13 @@ public class TransactionalController {
      * Portanto, precisamos listar sempre as 20 últimas transações que ocorreram para determinada pessoa.
      */
 
-    @GetMapping("/{id}")
-    public ResponseEntity consultTransactions(@PathVariable Long id, @PageableDefault(sort = "AccountId", direction = Sort.Direction.DESC, size = 20) Pageable pageable) {
+    @GetMapping(value = "/{id}")
+    public ResponseEntity consultTransactions(@PathVariable String id,
+                                              @PageableDefault(sort = "occurredOn", direction = Sort.Direction.DESC,
+                                                      size = 20) Pageable pageable) {
 
-        //Page<BankTransactional> transactions = transactionalRepository.findByAccountId(id, pageable);
+        Page<BankTransactional> bankTransactional = transactionalRepository.findByAccountId(id, pageable);
 
-
-
-
-        return ResponseEntity.ok("transactions");
+        return ResponseEntity.ok(bankTransactional.map(TransactionalResponse::new));
     }
 }

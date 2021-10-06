@@ -32,6 +32,18 @@ public class BankTransactional {
         this.account = account;
     }
 
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public LocalDateTime getOccurredOn() {
+        return occurredOn;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", BankTransactional.class.getSimpleName() + "[", "]")
