@@ -1,2 +1,5 @@
-package br.com.otbank.transacao;public enum TransactionType {
+package br.com.otbank.transacao;
+
+public enum TransactionType {
+    DEBIT,CREDIT
 }

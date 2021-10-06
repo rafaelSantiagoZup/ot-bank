@@ -9,12 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-public class TransactionDTO {
+public class Transaction {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     @NotNull @Positive
     private BigDecimal value;
     @NotNull
@@ -24,4 +21,23 @@ public class TransactionDTO {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
+    public UUID getId() {
+        return id;
+    }
+
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public LocalDateTime getOccurredIn() {
+        return occurredIn;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
 }
