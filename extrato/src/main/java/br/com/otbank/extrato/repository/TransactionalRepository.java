@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TransactionalRepository extends JpaRepository<BankTransactional, Long> {
-    Page<BankTransactional> findByContaId(Long id, Pageable pageable);
+    Page<BankTransactional> findByAccountId(Long id, Pageable pageable);
 }
