@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull
 @Introspected
 data class Customer (
     @field:NotBlank
+    val customerId:String,
+    @field:NotBlank
     val name:String,
     @field:NotBlank
     val email:String,

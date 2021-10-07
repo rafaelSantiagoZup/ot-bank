@@ -6,8 +6,8 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.annotation.Client
 import javax.validation.Valid
 
-@Client("http://localhost:8085/api/v1/payment/boleto")
-interface AccountClient {
+@Client("\${client.extranet}")
+interface ExtranetClient {
     @Post
     fun paymentBoleto(@Body @Valid boleto:BoletoRequest): HttpResponse<Any>
 }
