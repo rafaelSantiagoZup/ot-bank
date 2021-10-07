@@ -14,11 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/extracts/transactions")
+@RequestMapping("api/v1/extracts/transactions")
 public class TransactionalController {
 
     @Autowired
@@ -30,9 +27,9 @@ public class TransactionalController {
      */
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity consultTransactions(@PathVariable String id,
-                                              @PageableDefault(sort = "occurredOn", direction = Sort.Direction.DESC,
-                                                      size = 20) Pageable pageable) {
+    public ResponseEntity<Page<TransactionalResponse>> consultTransactions(@PathVariable String id,
+                                                                           @PageableDefault(sort = "occurredOn", direction = Sort.Direction.DESC,
+                                                                                   size = 20) Pageable pageable) {
 
         Page<BankTransactional> bankTransactional = transactionalRepository.findByAccountId(id, pageable);
 
