@@ -6,22 +6,24 @@ import br.com.otbank.businesslogic.NoOperation;
 import br.com.otbank.businesslogic.OperationAbstract;
 import br.com.otbank.cliente.Client;
 import br.com.otbank.cliente.ClientRepository;
+import br.com.otbank.cliente.ClientResponse;
 import br.com.otbank.transacao.Transaction;
 import br.com.otbank.transacao.TransactionDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
+
+    @Autowired
     private final ClientRepository clientRepository;
 
     public AccountController(ClientRepository clientRepository) {
@@ -45,4 +47,14 @@ public class AccountController {
         return ResponseEntity.ok(transaction);
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<?> getBalance(@PathVariable UUID id){
+        Optional<Client> client = clientRepository.findById(id);
+        if(client.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        ClientResponse response = new ClientResponse(client.get());
+
+        return ResponseEntity.ok(response);
+    }
 }

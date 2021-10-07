@@ -28,6 +28,9 @@ public class TransactionDTO {
     public TransactionDTO() {
     }
 
+    public TransactionDTO(String s, TransactionType credit, BigDecimal bigDecimal) {
+    }
+
     public UUID getClientId() {
         return clientId;
     }
