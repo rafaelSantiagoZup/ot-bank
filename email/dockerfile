@@ -1,0 +1,9 @@
+FROM openjdk:11
+COPY build/libs/email-0.1-all.jar /usr/src
+WORKDIR /usr/src
+ENV DATABASE_URL=jdbc:postgresql://localhost:5436/ot-bank-email\
+          DATABASE_USERNAME=postgres\
+          DATABASE_PASSWORD=pass\
+          KAFKA_SERVER_URL=localhost:9092
+EXPOSE 8081
+CMD java -jar email-0.1-all.jar

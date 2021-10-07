@@ -26,4 +26,25 @@ data class BoletoRequest(
             return Boleto(costumerId,value,expires,paid)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is BoletoRequest) return false
+
+        if (costumerId != other.costumerId) return false
+        if (value != other.value) return false
+        if (expires != other.expires) return false
+        if (paid != other.paid) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = costumerId?.hashCode() ?: 0
+        result = 31 * result + (value?.hashCode() ?: 0)
+        result = 31 * result + (expires?.hashCode() ?: 0)
+        result = 31 * result + paid.hashCode()
+        return result
+    }
+
 }

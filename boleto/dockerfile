@@ -1,0 +1,12 @@
+FROM openjdk:11
+COPY build/libs/boleto-0.1-all.jar /usr/src
+WORKDIR /usr/src
+ENV DATABASE_URL=jdbc:postgresql://localhost:5432/ot-bank-boleto\
+          DATABASE_USERNAME=postgres\
+          DATABASE_PASSWORD=pass\
+          KAFKA_ADDRESS=localhost:9092\
+          BANK_EXTRANET_ADDRESS=http://localhost:8084/api/v1/payment/boleto\
+          ACCOUNT_CLIENT_ADDRESS=http://localhost:8085/api/v1/payment/boleto\
+          PAYMENT_SCHEDULE=10m
+EXPOSE 8082
+CMD java -jar boleto-0.1-all.jar
