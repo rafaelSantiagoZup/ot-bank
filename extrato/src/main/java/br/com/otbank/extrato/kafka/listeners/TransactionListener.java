@@ -8,6 +8,7 @@ import br.com.otbank.extrato.repository.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class TransactionListener {
 
     private final Logger logger = LoggerFactory.getLogger(TransactionListener.class);
 
-    @KafkaListener(topics = "${spring.kafka.topic.transactions}")
+    @KafkaListener(id = "transacoes", topics = "transacoes")
     public void consumeTopic(TransactionConsumes transactionConsumes) {
 
         Transaction transaction = transactionConsumes.toModel(accountRepository, customerRepository);
