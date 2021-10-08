@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: boleto
+  server:
+    port: 8082
   router:
     static-resources:
       swagger:
@@ -11,11 +13,18 @@ micronaut:
         mapping: /swagger-ui/**
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/ot-bank-boleto
+    url: ${DATABASE_URL:'jdbc:postgresql://localhost:5432/ot-bank-boleto'}
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: changeme
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:changeme}
     schema-generate: UPDATE
     dialect: POSTGRES
-kafka.bootstrap.servers: localhost:9092
+kafka.bootstrap.servers: ${KAFKA_ADDRESS:'localhost:9092'}
 jpa.default.properties.hibernate.hbm2ddl.auto: update
+client:
+  extranet: ${BANK_EXTRANET_ADDRESS:`http://localhost:8084/api/v1/payment/boleto`}
+  account: ${ACCOUNT_CLIENT_ADDRESS:`http://localhost:8085/api/v1/payment/boleto`}
+kafka:
+  boleto-topic: transacoes
+request:
+  schedule: ${PAYMENT_SCHEDULE:10m}

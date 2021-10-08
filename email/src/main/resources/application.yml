@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: email
+  server:
+    port: 8081
   router:
     static-resources:
       swagger:
@@ -15,11 +17,14 @@ micronaut:
       nThreads: 25
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5436/ot-bank-email
+    url: ${DATABASE_URL:'jdbc:postgresql://localhost:5436/ot-bank-email'}
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: pass
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:pass}
     schema-generate: UPDATE
     dialect: POSTGRES
 jpa.default.properties.hibernate.hbm2ddl.auto: update
-kafka.bootstrap.servers: localhost:9092
+kafka:
+  bootstrap:
+    servers: ${KAFKA_ADDRESS}
+jackson.serialization.writeDatesAsTimestamps: false

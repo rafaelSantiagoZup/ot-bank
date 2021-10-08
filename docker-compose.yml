@@ -19,7 +19,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
   postgres-boleto:
@@ -81,6 +81,42 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: ot-bank-email
       POSTGRES_HOST: ot-bank-email
+      
+  extranet-node:
+    image: 'rafaelsant/extranet'
+    ports: 
+      - 8090:8090
+  
+  ot-bank-email:
+    image: ot-bank/email
+    ports:
+      - 8081:8081
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres-email:5432/ot-bank-email
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: pass
+      KAFKA_ADDRESS: kafka:9092
+    depends_on:
+      - zookeeper
+      - kafka
+      - postgres-email
+  
+  ot-bank-email:
+    image: ot-bank/boleto
+    ports:
+      - 8082:8082
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres-boleto:5432/ot-bank-boleto
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: changeme
+      KAFKA_ADDRESS: kafka:9092
+      BANK_EXTRANET_ADDRESS: http://extranet-node:8084/api/v1/payment/boleto
+      ACCOUNT_CLIENT_ADDRESS: http://localhost:8085/api/v1/payment/boleto\
+      PAYMENT_SCHEDULE: 10m
+    depends_on:
+      - zookeeper
+      - kafka
+      - postgres-boleto
     
 volumes:
   postgres-boleto:
