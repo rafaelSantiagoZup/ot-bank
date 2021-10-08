@@ -1,0 +1,12 @@
+FROM openjdk:11
+COPY /target/extrato-0.0.1-SNAPSHOT.jar /usr/src/myapp
+WORKDIR /usr/src
+ENV THREAD_WAIT=20000\ 
+          URL_DATABASE=jdbc:postgresql://localhost:5433/ot-bank-extrato\
+          POSTGRES_USER=postgres\
+          POSTGRES_PASSWORD=changeme\
+          KAFKA_HOST=localhost:9092\
+          KAFKA_CONSUMER_GROUP_ID=transacao\
+          KAFKA_AUTO-OFFSET-RESET=latest
+RUN java -jar extrato-0.0.1-SNAPSHOT.jar
+EXPOSE 8080

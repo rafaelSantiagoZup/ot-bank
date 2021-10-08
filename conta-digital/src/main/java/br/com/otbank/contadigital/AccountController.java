@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/api/v1")
 public class AccountController {
 
     @Autowired
@@ -30,7 +32,7 @@ public class AccountController {
         this.clientRepository = clientRepository;
     }
 
-    @PostMapping
+    @PostMapping("/accounts")
     @Transactional
     ResponseEntity<?> addTransaction (@Valid @RequestBody TransactionDTO transactionDTO){
         Client client = clientRepository.getById(transactionDTO.getClientId());
@@ -46,8 +48,13 @@ public class AccountController {
                 );
         return ResponseEntity.ok(transaction);
     }
+    @GetMapping("/clients")
+    ResponseEntity<?> getAllClients(){
+        List<Client> clients = clientRepository.findAll();
+        return ResponseEntity.ok(clients);
+    }
 
-    @GetMapping("/{id}")
+    @GetMapping("/accounts/{id}")
     ResponseEntity<?> getBalance(@PathVariable UUID id){
         Optional<Client> client = clientRepository.findById(id);
         if(client.isEmpty()){

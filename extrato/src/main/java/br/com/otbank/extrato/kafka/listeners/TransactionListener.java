@@ -27,6 +27,7 @@ public class TransactionListener {
 
     private final Logger logger = LoggerFactory.getLogger(TransactionListener.class);
 
+
     @KafkaListener(id = "transacoes", topics = "transacoes")
     public void consumeTopic(TransactionConsumes transactionConsumes) {
 
