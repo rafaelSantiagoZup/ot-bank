@@ -11,7 +11,7 @@ import java.util.UUID;
 public class TransactionDTO {
 
     @NotNull
-    private UUID clientId;
+    private String clientId;
     @Enumerated(EnumType.STRING)
     @NotNull
     private TransactionType type;
@@ -19,7 +19,7 @@ public class TransactionDTO {
     private BigDecimal value;
 
     public TransactionDTO(@Valid Transaction transaction){
-        this.clientId = transaction.getCustomer().getId();
+        this.clientId = transaction.getCustomer().getCustomerId();
         this.type = transaction.getType();
         this.value = transaction.getValue();
     }
@@ -30,11 +30,11 @@ public class TransactionDTO {
     public TransactionDTO(String s, TransactionType credit, BigDecimal bigDecimal) {
     }
 
-    public UUID getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(UUID clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 

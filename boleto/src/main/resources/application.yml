@@ -22,9 +22,15 @@ datasources:
 kafka.bootstrap.servers: localhost:9092
 jpa.default.properties.hibernate.hbm2ddl.auto: update
 client:
-  extranet: ${BANK_EXTRANET_ADDRESS:`http://localhost:8084/api/v1/payment/boleto`}
-  account: ${ACCOUNT_CLIENT_ADDRESS:`http://localhost:8085/api/v1/payment/boleto`}
+  extranet: ${BANK_EXTRANET_ADDRESS:`http://localhost:8090/api/v1/payment/boleto`}
+  account: ${ACCOUNT_CLIENT_ADDRESS:`http://localhost:8080/api/v1/bank`}
 kafka:
   boleto-topic: transacoes
 request:
   schedule: ${PAYMENT_SCHEDULE:10m}
+ribbon:
+  clients:
+    orquestrador:
+      list-of-servers: [localhost:8097,localhost:8098]
+      VipAddress: test
+      ServerListRefreshInterval: 2000

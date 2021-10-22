@@ -1,13 +1,18 @@
 micronaut:
   application:
     name: orquestrador
-datasources:
-  default:
-    url: jdbc:postgresql://localhost:5432/postgres
-    driverClassName: org.postgresql.Driver
-    username: postgres
-    password: ''
-    schema-generate: CREATE_DROP
-    dialect: POSTGRES
+  server:
+    port: 8097
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
 kafka.bootstrap.servers: localhost:9092
-jpa.default.properties.hibernate.hbm2ddl.auto: update
+clients:
+  conta-digital: ${CONTA_DIGITAL_URL:'localhost:8080/api/v1'}
+  boleto: ${BOLETO_URL:'localhost:8082/api/v1'}
+

@@ -1,6 +1,6 @@
 package br.com.otbank.transacao;
 
-import br.com.otbank.cliente.Client;
+import br.com.otbank.cliente.Customer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,14 +14,14 @@ public class Transaction {
     private UUID id = UUID.randomUUID();
     @NotNull @Positive
     private BigDecimal value;
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
     @NotNull
     private LocalDateTime occurredIn;
     @Embedded
-    private Client customer;
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    private Customer customer;
 
-    public Transaction(BigDecimal value, LocalDateTime occurredIn, Client client, TransactionType type) {
+    public Transaction(BigDecimal value, LocalDateTime occurredIn, Customer client, TransactionType type) {
         this.value = value;
         this.occurredIn = occurredIn;
         this.customer = client;
@@ -59,11 +59,11 @@ public class Transaction {
         this.occurredIn = occurredIn;
     }
 
-    public Client getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Client customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 

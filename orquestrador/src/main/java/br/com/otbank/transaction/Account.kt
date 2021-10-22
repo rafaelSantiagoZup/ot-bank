@@ -1,17 +1,16 @@
 package br.com.otbank.transaction
 
 import io.micronaut.core.annotation.Introspected
+import java.math.BigDecimal
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
 @Introspected
-data class Customer (
+data class Account(
     @field:NotBlank
-    val customerId:String,
-    @field:NotBlank
-    val name:String,
-    @field:NotBlank
-    val email:String,
+    val agency:String,
     @field:NotNull
-    val account: Account
-    )
+    val accountNumber:String,
+    @field:NotNull
+    val balance:BigDecimal
+)

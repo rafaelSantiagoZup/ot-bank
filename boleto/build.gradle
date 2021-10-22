@@ -45,7 +45,7 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:3.12.4")
     testImplementation("org.awaitility:awaitility:4.0.3")
     implementation("io.micronaut:micronaut-validation")
-
+    implementation("io.micronaut.netflix:micronaut-netflix-ribbon")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 }
@@ -69,6 +69,4 @@ tasks {
             jvmTarget = "11"
         }
     }
-
-
 }

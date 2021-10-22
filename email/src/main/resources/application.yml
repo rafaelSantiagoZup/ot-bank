@@ -17,7 +17,7 @@ micronaut:
       nThreads: 25
 datasources:
   default:
-    url: ${DATABASE_URL:'jdbc:postgresql://localhost:5436/ot-bank-email'}
+    url: jdbc:postgresql://localhost:5436/ot-bank-email
     driverClassName: org.postgresql.Driver
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:pass}
@@ -26,5 +26,5 @@ datasources:
 jpa.default.properties.hibernate.hbm2ddl.auto: update
 kafka:
   bootstrap:
-    servers: ${KAFKA_ADDRESS}
+    servers: localhost:9092
 jackson.serialization.writeDatesAsTimestamps: false

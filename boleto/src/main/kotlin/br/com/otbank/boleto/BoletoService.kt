@@ -2,38 +2,46 @@ package br.com.otbank.boleto
 
 import br.com.otbank.boleto.Boleto.Companion.toBoletoRequest
 import br.com.otbank.boleto.BoletoRequest.Companion.toModel
+import br.com.otbank.notify.NotifyExtranet
+import br.com.otbank.notify.NotifyKafka
+import br.com.otbank.notify.NotifyServices
 import br.com.otbank.transaction.TransactionDTO
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
+import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.scheduling.annotation.Scheduled
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
-@Singleton
-class BoletoService(@Inject
-                    val repository: BoletoRepository,
-                    @Inject
+class BoletoService(val repository: BoletoRepository,
                     private val accountClient:AccountClient,
-                    @Inject
                     private val extranetClient:ExtranetClient,
-                    @Inject
                     private val kafkaBoletoProducer: KafkaBoletoProducer) {
 
+    val logger = LoggerFactory.getLogger(this::class.java)
+
     fun addBoleto(boletoRequest: BoletoRequest):HttpResponse<Any>{
-        val balance = accountClient.clientBalance(boletoRequest.costumerId!!)
-        if(balance.status == HttpStatus.NOT_FOUND){
-            return HttpResponse.notFound();
+        if(!compareDates(boletoRequest.expires!!)){
+            logger.info("Boleto scheduled for ${boletoRequest.expires}")
+            return scheduleBoleto(boletoRequest)
         }
-        if(balance.body().balance.compareTo(boletoRequest.value) == -1){
-            return HttpResponse.unprocessableEntity<Any?>().body("O saldo é menor do que o valor do boleto")
+        return payBoleto(boletoRequest)
+    }
+
+    private fun payBoleto(boletoRequest: BoletoRequest): HttpResponse<Any> {
+        try{
+            logger.info("Sending payment request to Bank")
+            val transaction = accountClient.paymentBoleto(boletoRequest)
+            payAndSave(boletoRequest)
+            notifyServices(boletoRequest,transaction.body())
+            return HttpResponse.ok()
+        }catch (e:HttpClientResponseException){
+            return HttpResponse.status(e.status,e.message)
         }
-        if(compareDates(boletoRequest.expires!!)){
-            return externalCommunication(boletoRequest)
-        }
-        var boleto = boletoRequest.toModel()
-        repository.save(boleto)
-        return HttpResponse.ok<Any?>().body("Boleto Agendado com sucesso")
+    }
+
+    fun payAndSave(boletoRequest: BoletoRequest){
+        boletoRequest.paid = true
+        repository.save(boletoRequest.toModel())
     }
 
     @Scheduled(fixedDelay = "\${request.schedule}")
@@ -41,68 +49,29 @@ class BoletoService(@Inject
         val boletos = repository.findAllByPaidAndExpires(false, LocalDate.now())
         boletos.forEach{ boleto->
             val boletoRequest = boleto.toBoletoRequest()
-            val responseAccount = requestExternalServices(boletoRequest)
-            if(responseAccount.status == HttpStatus.OK){
-                emitMessageAndSave(responseAccount, boletoRequest)
-            }
+            payBoleto(boletoRequest)
         }
     }
 
     fun compareDates(date:LocalDate):Boolean{
-        return date == LocalDate.now()
+        return date.toEpochDay() == LocalDate.now().toEpochDay()
     }
 
-    fun externalCommunication(boletoRequest: BoletoRequest): HttpResponse<Any> {
+    fun notifyServices(boletoRequest: BoletoRequest,transaction:TransactionDTO) {
+       var notified:MutableList<NotifyServices> = mutableListOf(NotifyExtranet(),NotifyKafka())
+        notified.forEach { it->it.notifica(extranetClient,kafkaBoletoProducer,boletoRequest,transaction) }
+    }
+
+    fun scheduleBoleto(boletoRequest: BoletoRequest):HttpResponse<Any>{
         try{
-            val responseAccount = requestExternalServices(boletoRequest)
-            println("status code "+responseAccount.status)
-            if(responseAccount.status == HttpStatus.OK){
-                emitMessageAndSave(responseAccount, boletoRequest)
-                return HttpResponse.ok()
-            }
-            else{
-                println(responseAccount.status())
-                return HttpResponse.unprocessableEntity()
-            }
-        } catch (e:Exception){
-            return HttpResponse.serverError()
+            val balance = accountClient.clientBalance(boletoRequest.costumerId!!)
+            logger.info(balance.body.toString())
+            var boleto = boletoRequest.toModel()
+            repository.save(boleto)
+            logger.info("Payment ${boleto.id} schedulled with success")
+            return HttpResponse.ok<Any?>().body("Boleto Agendado com sucesso")
+        }catch (e:HttpClientResponseException){
+            return HttpResponse.status<Any?>(e.status).body(e.status)
         }
     }
-
-    private fun emitMessageAndSave(
-        responseAccount: HttpResponse<TransactionDTO>,
-        boletoRequest: BoletoRequest
-    ) {
-        kafkaBoletoProducer.sendTransactionMessage(responseAccount.body())
-        val boleto = boletoRequest.toModel()
-        boleto.paid = true
-        repository.save(boleto)
-    }
-
-    fun requestExternalServices(boletoRequest: BoletoRequest): HttpResponse<TransactionDTO> {
-        extranetClient.paymentBoleto(boletoRequest)
-        return accountClient.paymentBoleto(boletoRequest)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is BoletoService) return false
-
-        if (repository != other.repository) return false
-        if (accountClient != other.accountClient) return false
-        if (extranetClient != other.extranetClient) return false
-        if (kafkaBoletoProducer != other.kafkaBoletoProducer) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = repository.hashCode()
-        result = 31 * result + accountClient.hashCode()
-        result = 31 * result + extranetClient.hashCode()
-        result = 31 * result + kafkaBoletoProducer.hashCode()
-        return result
-    }
-
-
 }

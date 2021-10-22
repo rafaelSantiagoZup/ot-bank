@@ -3,18 +3,18 @@ package br.com.otbank.cliente;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class ClientResponse {
+public class CustomerResponse {
 
-    private UUID clientId;
+    private String customerId;
     private BigDecimal balance;
 
-    public ClientResponse(Client client) {
-        this.clientId = client.getId();
+    public CustomerResponse(Customer client) {
+        this.customerId = client.getCustomerId();
         this.balance = client.getAccount().getBalance();
     }
 
-    public UUID getClientId() {
-        return clientId;
+    public String getCustomerId() {
+        return customerId;
     }
 
     public BigDecimal getBalance() {

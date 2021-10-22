@@ -1,6 +1,8 @@
 package br.com.otbank.contadigital;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -13,10 +15,10 @@ public class Account {
 
     @Id
     private UUID id = UUID.randomUUID();
-    @NotBlank
-    private String agency;
     @NotNull
-    private Integer accountNumber;
+    private Integer agency;
+    @NotNull
+    private String accountNumber;
     @Positive
     private BigDecimal balance;
 
@@ -24,25 +26,25 @@ public class Account {
     public Account() {
     }
 
-    public Account(String agency, Integer accountNumber, BigDecimal balance) {
+    public Account(Integer agency, String accountNumber, BigDecimal balance) {
         this.agency = agency;
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
 
-    public String getAgency() {
+    public Integer getAgency() {
         return agency;
     }
 
-    public void setAgency(String agency) {
+    public void setAgency(Integer agency) {
         this.agency = agency;
     }
 
-    public Integer getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Integer accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 
@@ -56,9 +58,5 @@ public class Account {
 
     public UUID getId() {
         return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 }

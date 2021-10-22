@@ -10,10 +10,9 @@ import java.util.UUID;
 
 @Embeddable
 @Entity
-public class Client {
-
+public class Customer {
     @Id
-    private UUID id = UUID.randomUUID();
+    private String customerId;
     @NotBlank
     private String name;
     @NotNull @Email
@@ -22,14 +21,16 @@ public class Client {
     @Embedded
     private Account account;
 
+    public Customer(String customerId, String name, String email, Account account) {
+        this.customerId = customerId;
+        this.name = name;
+        this.email = email;
+        this.account = account;
+    }
+
     @Deprecated
-    public Client() {
+    public Customer() {
     }
-
-    public UUID getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
@@ -41,11 +42,6 @@ public class Client {
     public Account getAccount() {
         return account;
     }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -56,5 +52,12 @@ public class Client {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 }
